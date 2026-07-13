@@ -3,190 +3,290 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kayke Kelson | Cyber Security Portfolio</title>
+<title>Kayke Kelson | Suporte N1 & Cyber Security</title>
+<meta name="description" content="Portfólio de Kayke Kelson — Suporte Técnico N1, com certificações em SOC, Hacker Ético e Segurança em Linux, e projetos de automação de processos.">
+<meta name="theme-color" content="#0d1117">
 
-<link rel="stylesheet" href="style.css">
+<meta property="og:title" content="Kayke Kelson | Suporte N1 & Cyber Security">
+<meta property="og:description" content="Suporte Técnico N1 com certificações em SOC, Hacker Ético e Segurança em Linux. Automação que reduziu em até 90% o tempo de processos manuais.">
+<meta property="og:type" content="website">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
-<div id="particles"></div>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="background-glow" aria-hidden="true"></div>
 
 <header>
+  <nav aria-label="Navegação principal">
+    <a class="logo" href="#topo">KAYKE<span>_</span>KELSON</a>
 
-<nav>
-    <div class="logo">KAYKE KELSON</div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navList" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
 
-    <ul>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#certificacoes">Certificações</a></li>
-        <li><a href="#projetos">Projetos</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#contato">Contato</a></li>
+    <ul id="navList">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#certificacoes">Certificações</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contato">Contato</a></li>
     </ul>
-</nav>
+  </nav>
 
-<section class="hero">
-<div class="perfil">
-    <img src="assets/Foto_perfil.jpeg" alt="Kayke Kelson">
-</div>
-<h1>Suporte Tecnico N1</h1>
+  <section class="hero" id="topo">
+    <div class="perfil">
+      <img
+        src="assets/Foto_perfil.jpeg"
+        alt="Foto de Kayke Kelson, Analista de Suporte N1"
+        width="220" height="220"
+        fetchpriority="high"
+      >
+    </div>
 
-<div class="typing">
-    <span id="text"></span>
-</div>
+    <p class="eyebrow">Manaus – AM</p>
+    <h1>Kayke Kelson</h1>
+    <h2>Suporte Técnico N1</h2>
 
-<p>
-SOC • Linux • Redes • Automação • Cibersegurança
-</p>
+    <div class="typing" aria-live="polite">
+      <span id="text"></span><span class="cursor" aria-hidden="true"></span>
+    </div>
 
-<a href="cv/Curriculo_Kayke_Kelson.pdf" class="btn">
-Baixar Currículo
-</a>
+    <p class="hero-desc">
+      SOC · Linux · Redes · Automação · Cibersegurança
+    </p>
 
-</section>
-
+    <div class="buttons">
+      <a href="cv/Curriculo_Kayke_Kelson.pdf" class="btn" download>Baixar Currículo</a>
+      <a href="#projetos" class="btn-outline">Ver Projetos</a>
+    </div>
+  </section>
 </header>
 
-<section id="sobre">
+<main id="conteudo">
 
-<h2>Sobre Mim</h2>
+  <section id="sobre">
+    <p class="eyebrow">Sobre</p>
+    <h2 class="section-title">Quem eu sou</h2>
 
-<p>
-Estudante de Análise e Desenvolvimento de Sistemas com foco em Segurança da Informação,
-Redes e Automação de Processos.
+    <div class="sobre-card">
+      <p>
+        Estudante de Análise e Desenvolvimento de Sistemas com foco em Segurança da
+        Informação, Redes e Automação de Processos. Atualmente atuo como Suporte N1
+        na ClickIP / Grupo i_mais, com histórico em telecomunicações, logística e
+        almoxarifado.
+      </p>
+      <p>
+        Possuo certificações pela IBSEC e experiência prática na implementação de
+        soluções que reduziram significativamente o tempo operacional em ambientes
+        corporativos — unindo suporte, redes e automação no dia a dia.
+      </p>
+    </div>
+  </section>
 
-Possuo certificações pela IBSEC e experiência prática na implementação de soluções
-que reduziram significativamente o tempo operacional em ambientes corporativos.
-</p>
+  <section id="certificacoes">
+    <p class="eyebrow">Certificações</p>
+    <h2 class="section-title">Certificações IBSEC</h2>
 
-</section>
+    <div class="cards">
+      <figure class="card">
+        <img src="assets/certificado_linux.jpeg" alt="Certificado Segurança em Linux, IBSEC" loading="lazy" width="220" height="220">
+        <figcaption>
+          <h3>Segurança em Linux</h3>
+          <p>IBSEC · 2025</p>
+        </figcaption>
+      </figure>
 
-<section id="certificacoes">
+      <figure class="card">
+        <img src="assets/certificado_soc.jpeg" alt="Certificado Analista SOC, IBSEC" loading="lazy" width="220" height="220">
+        <figcaption>
+          <h3>Analista SOC</h3>
+          <p>IBSEC · 2025</p>
+        </figcaption>
+      </figure>
 
-<h2>Certificações IBSEC</h2>
+      <figure class="card">
+        <img src="assets/certificado_hacker.jpeg" alt="Certificado Hacker Ético, IBSEC" loading="lazy" width="220" height="220">
+        <figcaption>
+          <h3>Hacker Ético</h3>
+          <p>IBSEC · Associado</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
 
-<div class="cards">
+  <section id="projetos">
+    <p class="eyebrow">Projetos</p>
+    <h2 class="section-title">Projetos de Impacto</h2>
 
-<div class="card">
-<img src="assets/certificado_linux.jpeg">
-<h3>Segurança em Linux</h3>
-</div>
+    <div class="project">
+      <div class="project-visual" role="img" aria-label="Animação: código de barras sendo lido e enviado automaticamente para uma planilha Excel">
+        <!-- Animação: leitor de código de barras -> Excel -->
+        <svg viewBox="0 0 340 200" class="project-svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="beamGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#00ff9d" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#00ff9d" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
 
-<div class="card">
-<img src="assets/certificado_soc.jpeg">
-<h3>Analista SOC</h3>
-</div>
+          <!-- scanner -->
+          <rect x="14" y="70" width="46" height="60" rx="8" fill="#161b22" stroke="#00ff9d" stroke-width="2"/>
+          <rect x="24" y="82" width="26" height="18" rx="2" fill="#0d1117"/>
+          <rect x="24" y="82" width="26" height="18" rx="2" fill="none" stroke="#00ff9d" stroke-width="1"/>
+          <line class="scan-beam" x1="37" y1="82" x2="37" y2="100" stroke="url(#beamGrad)" stroke-width="3"/>
 
-<div class="card">
-<img src="assets/certificado_hacker.jpeg">
-<h3>Hacker Ético</h3>
-</div>
+          <!-- barcode -->
+          <g class="barcode-group">
+            <rect x="90" y="88" width="4" height="24" fill="#c5c5c5"/>
+            <rect x="97" y="88" width="2" height="24" fill="#c5c5c5"/>
+            <rect x="102" y="88" width="6" height="24" fill="#c5c5c5"/>
+            <rect x="111" y="88" width="2" height="24" fill="#c5c5c5"/>
+            <rect x="116" y="88" width="4" height="24" fill="#c5c5c5"/>
+            <rect x="123" y="88" width="3" height="24" fill="#c5c5c5"/>
+          </g>
 
-</div>
+          <!-- data pulse traveling to spreadsheet -->
+          <path id="dataPath" d="M130 100 H 230" stroke="#00ff9d" stroke-width="1.5" stroke-dasharray="4 4" fill="none" opacity=".5"/>
+          <circle r="4" fill="#00ff9d" class="data-pulse">
+            <animateMotion dur="1.8s" repeatCount="indefinite" path="M130 100 H 230"/>
+          </circle>
 
-</section>
+          <!-- spreadsheet -->
+          <rect x="234" y="46" width="92" height="108" rx="8" fill="#161b22" stroke="#00ff9d" stroke-width="2"/>
+          <g stroke="#243042" stroke-width="1">
+            <line x1="234" y1="70" x2="326" y2="70"/>
+            <line x1="234" y1="94" x2="326" y2="94"/>
+            <line x1="234" y1="118" x2="326" y2="118"/>
+            <line x1="234" y1="142" x2="326" y2="142"/>
+            <line x1="264" y1="46" x2="264" y2="154"/>
+            <line x1="296" y1="46" x2="296" y2="154"/>
+          </g>
+          <rect class="cell-fill" x="234" y="94" width="30" height="24" fill="#00ff9d" opacity="0"/>
+          <text x="250" y="34" fill="#c5c5c5" font-size="10" text-anchor="middle" font-family="JetBrains Mono, monospace">planilha.xlsx</text>
+        </svg>
+      </div>
 
-<section id="projetos">
+      <div class="project-body">
+        <h3>Automação de Contagem de Componentes — Intelbras</h3>
+        <p>
+          Desenvolvimento de um sistema de leitura por código de barras integrado ao
+          Excel, eliminando a conferência manual de componentes no processo logístico.
+        </p>
+        <div class="resultado">Redução de erros e aumento de produtividade</div>
+      </div>
+    </div>
 
-<h2>Projetos de Impacto</h2>
+    <div class="project">
+      <div class="project-visual" role="img" aria-label="Animação: smartphone lendo código de barras e atualizando um dashboard em tempo real">
+        <!-- Animação: smartphone scanner -> dashboard tempo real -->
+        <svg viewBox="0 0 340 200" class="project-svg" aria-hidden="true">
+          <!-- smartphone -->
+          <rect x="24" y="46" width="60" height="108" rx="10" fill="#161b22" stroke="#00ff9d" stroke-width="2"/>
+          <rect x="32" y="58" width="44" height="70" rx="3" fill="#0d1117"/>
+          <rect class="phone-scanline" x="32" y="58" width="44" height="6" fill="#00ff9d" opacity=".7"/>
+          <circle cx="54" cy="140" r="4" fill="#243042"/>
 
-<div class="project">
+          <!-- wifi signal to dashboard -->
+          <g class="wifi-pulse" fill="none" stroke="#00ff9d" stroke-width="2" stroke-linecap="round">
+            <path d="M108 96 a14 14 0 0 1 20 0" opacity="0"/>
+            <path d="M113 104 a8 8 0 0 1 10 0" opacity="0"/>
+            <circle cx="118" cy="112" r="2" fill="#00ff9d" stroke="none"/>
+          </g>
 
-<h3>Automação de Contagem de Componentes - Intelbras</h3>
+          <!-- dashboard -->
+          <rect x="150" y="36" width="176" height="128" rx="10" fill="#161b22" stroke="#00ff9d" stroke-width="2"/>
+          <text x="164" y="56" fill="#c5c5c5" font-size="10" font-family="JetBrains Mono, monospace">dashboard // live</text>
+          <circle cx="308" cy="52" r="3" class="live-dot" fill="#00ff9d"/>
 
-<p>
-Desenvolvimento de sistema de leitura por código de barras integrado ao Excel,
-eliminando processos manuais de conferência.
-</p>
+          <g class="bars">
+            <rect x="164" y="118" width="16" height="30" fill="#243042"/>
+            <rect x="164" y="118" width="16" height="30" fill="#00ff9d" class="bar bar-1"/>
+            <rect x="192" y="100" width="16" height="48" fill="#243042"/>
+            <rect x="192" y="100" width="16" height="48" fill="#00ff9d" class="bar bar-2"/>
+            <rect x="220" y="112" width="16" height="36" fill="#243042"/>
+            <rect x="220" y="112" width="16" height="36" fill="#00ff9d" class="bar bar-3"/>
+            <rect x="248" y="88" width="16" height="60" fill="#243042"/>
+            <rect x="248" y="88" width="16" height="60" fill="#00ff9d" class="bar bar-4"/>
+          </g>
+          <text x="164" y="80" fill="#00ff9d" font-size="18" font-family="JetBrains Mono, monospace" class="counter-text">5h → 30min</text>
+        </svg>
+      </div>
 
-<div class="resultado">
-Redução de erros e aumento de produtividade.
-</div>
+      <div class="project-body">
+        <h3>Sistema Inteligente de Conferência — Hikvision</h3>
+        <p>
+          Integração de scanner via smartphone com dashboard em Excel para
+          acompanhamento em tempo real da conferência de materiais.
+        </p>
+        <div class="resultado">Tempo reduzido de 5 horas para 30 minutos</div>
+      </div>
+    </div>
+  </section>
 
-</div>
+  <section class="stats" aria-label="Resultados em números">
+    <div class="stat">
+      <h3><span class="counter" data-target="90">0</span>%</h3>
+      <p>Redução de Tempo</p>
+    </div>
+    <div class="stat">
+      <h3><span class="counter" data-target="3">0</span></h3>
+      <p>Certificações</p>
+    </div>
+    <div class="stat">
+      <h3><span class="counter" data-target="2">0</span></h3>
+      <p>Projetos Aplicados</p>
+    </div>
+    <div class="stat">
+      <h3><span class="counter" data-target="100">0</span>%</h3>
+      <p>Experiência Prática</p>
+    </div>
+  </section>
 
-<div class="project">
+  <section id="skills">
+    <p class="eyebrow">Skills</p>
+    <h2 class="section-title">Habilidades</h2>
 
-<h3>Sistema Inteligente de Conferência - Hikvison</h3>
+    <div class="skills-container">
+      <div class="skill">
+        <span>Linux</span>
+        <div class="bar"><div style="--w:85%"></div></div>
+      </div>
+      <div class="skill">
+        <span>TCP/IP</span>
+        <div class="bar"><div style="--w:90%"></div></div>
+      </div>
+      <div class="skill">
+        <span>Excel Avançado</span>
+        <div class="bar"><div style="--w:95%"></div></div>
+      </div>
+      <div class="skill">
+        <span>Automação</span>
+        <div class="bar"><div style="--w:90%"></div></div>
+      </div>
+    </div>
+  </section>
 
-<p>
-Integração de scanner via smartphone com dashboard em Excel para acompanhamento
-em tempo real.
-</p>
-
-<div class="resultado">
-Tempo reduzido de 5 horas para 30 minutos.
-</div>
-
-</div>
-
-</section>
-
-<section class="stats">
-
-<div class="stat">
-<h3>90%</h3>
-<p>Redução de Tempo</p>
-</div>
-
-<div class="stat">
-<h3>3</h3>
-<p>Certificações</p>
-</div>
-
-<div class="stat">
-<h3>2</h3>
-<p>Projetos Aplicados</p>
-</div>
-
-<div class="stat">
-<h3>100%</h3>
-<p>Experiência Prática</p>
-</div>
-
-</section>
-
-<section id="skills">
-
-<h2>Habilidades</h2>
-
-<div class="skill">
-<span>Linux</span>
-<div class="bar"><div style="width:85%"></div></div>
-</div>
-
-<div class="skill">
-<span>TCP/IP</span>
-<div class="bar"><div style="width:90%"></div></div>
-</div>
-
-<div class="skill">
-<span>Excel Avançado</span>
-<div class="bar"><div style="width:95%"></div></div>
-</div>
-
-<div class="skill">
-<span>Automação</span>
-<div class="bar"><div style="width:90%"></div></div>
-</div>
-
-</section>
+</main>
 
 <footer id="contato">
-
-<h2>Contato</h2>
-
-<p>Email: Kelsonkayke1@email.com</p>
-<p>LinkedIn: linkedin.com/in/kayke-kelson</p>
-<p>GitHub: github.com/Kelso404</p>
-
+  <h2>Vamos conversar</h2>
+  <p>
+    <a href="mailto:kelsonkayke1@gmail.com">kelsonkayke1@gmail.com</a>
+  </p>
+  <p><a href="tel:+5592985270501">(92) 98527-0501</a></p>
+  <p><a href="https://linkedin.com/in/kayke-kelson" target="_blank" rel="noopener noreferrer">linkedin.com/in/kayke-kelson</a></p>
+  <p><a href="https://github.com/Kelso404" target="_blank" rel="noopener noreferrer">github.com/Kelso404</a></p>
+  <p class="copy">© <span id="year"></span> Kayke Kelson</p>
 </footer>
 
-<script src="script.js"></script>
-
+<script src="script.js" defer></script>
 </body>
 </html>

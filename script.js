@@ -1,241 +1,270 @@
-// ===============================
-// EFEITO DE DIGITAÇÃO
-// ===============================
+/**
+ * Kayke Kelson — Portfolio
+ * Módulos independentes, cada um só roda se seus elementos existem no DOM.
+ * Respeita prefers-reduced-motion e usa listeners passivos para não travar o scroll.
+ */
+(() => {
+  "use strict";
 
-const words = [
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-    "Monitorando ameaças...",
-    "Analisando incidentes...",
-    "Protegendo sistemas...",
-    "Automatizando processos...",
-    "SOC Analyst...",
-    "Cyber Security..."
-];
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-let wordIndex = 0;
-let letterIndex = 0;
-let currentWord = "";
-let isDeleting = false;
+  /* ============================================================
+     NAV — menu mobile
+  ============================================================ */
+  const initNav = () => {
+    const toggle = $("#navToggle");
+    const list = $("#navList");
+    if (!toggle || !list) return;
 
-function typeEffect() {
-
-    currentWord = words[wordIndex];
-
-    if (!isDeleting) {
-
-        letterIndex++;
-
-    } else {
-
-        letterIndex--;
-
-    }
-
-    document.getElementById("text").textContent =
-        currentWord.substring(0, letterIndex);
-
-    let speed = isDeleting ? 50 : 120;
-
-    if (!isDeleting && letterIndex === currentWord.length) {
-
-        speed = 1800;
-        isDeleting = true;
-
-    } else if (isDeleting && letterIndex === 0) {
-
-        isDeleting = false;
-        wordIndex++;
-
-        if (wordIndex === words.length) {
-
-            wordIndex = 0;
-        }
-    }
-
-    setTimeout(typeEffect, speed);
-}
-
-typeEffect();
-
-
-// ===============================
-// ANIMAÇÃO AO ROLAR A PÁGINA
-// ===============================
-
-const observer = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.classList.add("show");
-        }
+    toggle.addEventListener("click", () => {
+      const isOpen = list.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
     });
 
-}, {
-    threshold: 0.15
-});
+    list.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        list.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  };
 
-document.querySelectorAll(
-    ".card, .projeto-card, .stat, .skill, .tools span, .sobre-card"
-).forEach((el) => {
+  /* ============================================================
+     EFEITO DE DIGITAÇÃO
+  ============================================================ */
+  const initTypingEffect = () => {
+    const el = $("#text");
+    if (!el) return;
 
-    el.classList.add("hidden");
-    observer.observe(el);
-});
+    const words = [
+      "Monitorando ameaças...",
+      "Analisando incidentes...",
+      "Protegendo sistemas...",
+      "Automatizando processos...",
+      "SOC Analyst...",
+      "Cyber Security...",
+    ];
 
+    if (prefersReducedMotion) {
+      el.textContent = words[0];
+      return;
+    }
 
-// ===============================
-// CONTADOR ANIMADO
-// ===============================
+    let wordIndex = 0;
+    let letterIndex = 0;
+    let isDeleting = false;
 
-const stats = document.querySelectorAll(".stat h3");
+    const tick = () => {
+      const currentWord = words[wordIndex];
+      letterIndex += isDeleting ? -1 : 1;
+      el.textContent = currentWord.substring(0, letterIndex);
 
-const animateCounter = (element, target) => {
+      let speed = isDeleting ? 45 : 110;
 
-    let count = 0;
+      if (!isDeleting && letterIndex === currentWord.length) {
+        speed = 1600;
+        isDeleting = true;
+      } else if (isDeleting && letterIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        speed = 300;
+      }
 
-    const increment = target / 60;
-
-    const update = () => {
-
-        count += increment;
-
-        if (count < target) {
-
-            element.innerText = Math.floor(count);
-
-            requestAnimationFrame(update);
-
-        } else {
-
-            element.innerText = target;
-        }
+      setTimeout(tick, speed);
     };
 
-    update();
-};
+    tick();
+  };
 
-const statObserver = new IntersectionObserver((entries) => {
+  /* ============================================================
+     REVEAL AO ROLAR
+  ============================================================ */
+  const initScrollReveal = () => {
+    const targets = $$(".card, .project, .stat, .skill");
+    if (!targets.length) return;
 
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            const el = entry.target;
-
-            const text = el.innerText;
-
-            if (
-                text.includes("%") ||
-                text.includes("→") ||
-                text.includes("h")
-            ) {
-                return;
-            }
-
-            const target = parseInt(text);
-
-            if (!isNaN(target)) {
-
-                el.innerText = "0";
-
-                animateCounter(el, target);
-            }
-
-            statObserver.unobserve(el);
-        }
-    });
-
-}, {
-    threshold: 0.5
-});
-
-stats.forEach(stat => {
-
-    statObserver.observe(stat);
-});
-
-
-// ===============================
-// EFEITO PARALLAX
-// ===============================
-
-window.addEventListener("scroll", () => {
-
-    const glow = document.querySelector(".background-glow");
-
-    let value = window.scrollY * 0.2;
-
-    glow.style.transform =
-        `translateY(${value}px)`;
-});
-
-
-// ===============================
-// BOTÃO VOLTAR AO TOPO
-// ===============================
-
-const topButton = document.createElement("button");
-
-topButton.innerHTML = "↑";
-
-topButton.id = "topButton";
-
-document.body.appendChild(topButton);
-
-topButton.style.position = "fixed";
-topButton.style.bottom = "25px";
-topButton.style.right = "25px";
-topButton.style.width = "50px";
-topButton.style.height = "50px";
-topButton.style.border = "none";
-topButton.style.borderRadius = "50%";
-topButton.style.background = "#00ff9d";
-topButton.style.color = "#000";
-topButton.style.fontSize = "22px";
-topButton.style.cursor = "pointer";
-topButton.style.display = "none";
-topButton.style.zIndex = "9999";
-topButton.style.boxShadow = "0 0 15px rgba(0,255,157,.4)";
-
-window.addEventListener("scroll", () => {
-
-    if (window.scrollY > 500) {
-
-        topButton.style.display = "block";
-
-    } else {
-
-        topButton.style.display = "none";
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("show"));
+      return;
     }
-});
 
-topButton.addEventListener("click", () => {
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
 
-    window.scrollTo({
-
-        top: 0,
-        behavior: "smooth"
+    targets.forEach((el) => {
+      el.classList.add("hidden");
+      observer.observe(el);
     });
-});
+  };
 
+  /* ============================================================
+     CONTADORES ANIMADOS (stats)
+  ============================================================ */
+  const initCounters = () => {
+    const counters = $$(".counter");
+    if (!counters.length) return;
 
-// ===============================
-// EFEITO BRILHO NO NOME
-// ===============================
+    const animate = (el) => {
+      const target = Number(el.dataset.target) || 0;
 
-const heroTitle = document.querySelector(".hero h1");
+      if (prefersReducedMotion) {
+        el.textContent = target;
+        return;
+      }
 
-setInterval(() => {
+      const duration = 1200;
+      const start = performance.now();
 
-    heroTitle.style.textShadow =
-        "0 0 10px #00ff9d, 0 0 25px #00ff9d";
+      const step = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.floor(eased * target);
 
-    setTimeout(() => {
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target;
+        }
+      };
 
-        heroTitle.style.textShadow = "none";
+      requestAnimationFrame(step);
+    };
 
-    }, 1000);
+    if (!("IntersectionObserver" in window)) {
+      counters.forEach(animate);
+      return;
+    }
 
-}, 4000);
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    counters.forEach((el) => observer.observe(el));
+  };
+
+  /* ============================================================
+     BARRAS DE SKILL
+  ============================================================ */
+  const initSkillBars = () => {
+    const bars = $$(".skill .bar > div");
+    if (!bars.length) return;
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      bars.forEach((bar) => bar.classList.add("filled"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("filled");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    bars.forEach((bar) => observer.observe(bar));
+  };
+
+  /* ============================================================
+     PARALLAX NO GLOW (com rAF + listener passivo)
+  ============================================================ */
+  const initParallax = () => {
+    const glow = $(".background-glow");
+    if (!glow || prefersReducedMotion) return;
+
+    let ticking = false;
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          glow.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+  };
+
+  /* ============================================================
+     BOTÃO VOLTAR AO TOPO
+  ============================================================ */
+  const initTopButton = () => {
+    const btn = document.createElement("button");
+    btn.innerHTML = "&uarr;";
+    btn.id = "topButton";
+    btn.setAttribute("aria-label", "Voltar ao topo");
+    document.body.appendChild(btn);
+
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          btn.classList.toggle("visible", window.scrollY > 500);
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+
+    btn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+    });
+  };
+
+  /* ============================================================
+     ANO NO RODAPÉ
+  ============================================================ */
+  const initFooterYear = () => {
+    const el = $("#year");
+    if (el) el.textContent = new Date().getFullYear();
+  };
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  document.addEventListener("DOMContentLoaded", () => {
+    initNav();
+    initTypingEffect();
+    initScrollReveal();
+    initCounters();
+    initSkillBars();
+    initParallax();
+    initTopButton();
+    initFooterYear();
+  });
+})();
