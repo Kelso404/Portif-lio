@@ -85,7 +85,7 @@
      REVEAL AO ROLAR
   ============================================================ */
   const initScrollReveal = () => {
-    const targets = $$(".card, .project, .stat, .skill");
+    const targets = $$(".card, .project, .stat, .skill, .soc-console");
     if (!targets.length) return;
 
     if (prefersReducedMotion || !("IntersectionObserver" in window)) {
@@ -247,6 +247,281 @@
   };
 
   /* ============================================================
+     SIMULADOR SOC
+     Todos os eventos são fictícios, gerados no cliente apenas
+     para demonstrar rotina de triagem em um SOC.
+  ============================================================ */
+  const initSocSimulator = () => {
+    const feedEl = $("#socFeed");
+    if (!feedEl) return;
+
+    const feedCountEl = $("#socFeedCount");
+    const totalEl = $("#socTotalAlerts");
+    const blockedEl = $("#socBlocked");
+    const activeEl = $("#socActive");
+    const severityBarsEl = $("#socSeverityBars");
+    const statusDot = $("#socStatusDot");
+    const statusText = $("#socStatusText");
+    const attackBtn = $("#socSimulateAttack");
+    const pauseBtn = $("#socPauseToggle");
+    const canvas = $("#socTrafficChart");
+    const ctx = canvas ? canvas.getContext("2d") : null;
+
+    const EVENT_POOL = {
+      critical: [
+        "Ransomware — assinatura detectada",
+        "Exfiltração de dados suspeita",
+        "Ataque DDoS em andamento",
+        "Escalonamento de privilégios não autorizado",
+      ],
+      high: [
+        "Tentativa de SQL Injection bloqueada",
+        "Malware detectado em endpoint",
+        "Múltiplas tentativas de login (brute force)",
+        "Conexão com C2 conhecido bloqueada",
+      ],
+      medium: [
+        "Port scan detectado",
+        "Tráfego incomum de saída",
+        "Política de firewall violada",
+        "Certificado SSL expirado",
+      ],
+      low: [
+        "Login fora do horário habitual",
+        "Assinatura de antivírus atualizada",
+        "Verificação de integridade concluída",
+        "Novo dispositivo autenticado na rede",
+      ],
+    };
+
+    const SEVERITY_LABELS = {
+      critical: "Crítico",
+      high: "Alto",
+      medium: "Médio",
+      low: "Baixo",
+    };
+
+    const SEVERITY_WEIGHTS = [
+      ["low", 0.4],
+      ["medium", 0.35],
+      ["high", 0.2],
+      ["critical", 0.05],
+    ];
+
+    const counts = { critical: 0, high: 0, medium: 0, low: 0 };
+    let totalAlerts = 0;
+    let blockedCount = 0;
+    let currentFilter = "all";
+    let isPaused = false;
+    let tickTimer = null;
+    const MAX_FEED_ITEMS = 30;
+
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    const randomIp = () =>
+      `${1 + Math.floor(Math.random() * 223)}.${Math.floor(
+        Math.random() * 255
+      )}.${Math.floor(Math.random() * 255)}.${1 + Math.floor(Math.random() * 254)}`;
+
+    const pickSeverity = () => {
+      const roll = Math.random();
+      let acc = 0;
+      for (const [sev, weight] of SEVERITY_WEIGHTS) {
+        acc += weight;
+        if (roll <= acc) return sev;
+      }
+      return "low";
+    };
+
+    const actionFor = (severity) => {
+      if (severity === "critical") return pick(["Bloqueado", "Em investigação"]);
+      if (severity === "high") return pick(["Bloqueado", "Mitigado", "Em investigação"]);
+      if (severity === "medium") return "Monitorando";
+      return "Registrado";
+    };
+
+    const timeNow = () =>
+      new Date().toLocaleTimeString("pt-BR", { hour12: false });
+
+    const updateFilterVisibility = () => {
+      $$(".soc-event", feedEl).forEach((el) => {
+        const match = currentFilter === "all" || el.dataset.severity === currentFilter;
+        el.classList.toggle("hidden-by-filter", !match);
+      });
+    };
+
+    const renderSeverityBars = () => {
+      if (!severityBarsEl) return;
+      const total = Math.max(totalAlerts, 1);
+      severityBarsEl.innerHTML = ["critical", "high", "medium", "low"]
+        .map((sev) => {
+          const pct = Math.round((counts[sev] / total) * 100);
+          return `
+            <div class="soc-sev-row">
+              <span class="soc-sev-name">${SEVERITY_LABELS[sev]}</span>
+              <span class="soc-sev-track"><span class="soc-sev-fill sev-fill-${sev}" style="width:${pct}%"></span></span>
+              <span class="soc-sev-count">${counts[sev]}</span>
+            </div>`;
+        })
+        .join("");
+    };
+
+    const updateMetrics = () => {
+      if (totalEl) totalEl.textContent = totalAlerts;
+      if (blockedEl) blockedEl.textContent = blockedCount;
+      if (activeEl) activeEl.textContent = counts.critical + counts.high;
+      if (feedCountEl) {
+        const n = feedEl.children.length;
+        feedCountEl.textContent = `${n} evento${n === 1 ? "" : "s"}`;
+      }
+      renderSeverityBars();
+    };
+
+    const addEvent = (forcedSeverity) => {
+      const severity = forcedSeverity || pickSeverity();
+      const type = pick(EVENT_POOL[severity]);
+      const action = actionFor(severity);
+      const ip = randomIp();
+
+      totalAlerts += 1;
+      counts[severity] += 1;
+      if (action === "Bloqueado" || action === "Mitigado") blockedCount += 1;
+
+      const item = document.createElement("div");
+      item.className = `soc-event severity-${severity}`;
+      item.dataset.severity = severity;
+      item.innerHTML = `
+        <span class="soc-event-time">${timeNow()}</span>
+        <div class="soc-event-main">
+          <span class="soc-event-type">${type}</span>
+          <span class="soc-event-meta">Origem ${ip} · ${action}</span>
+        </div>
+        <span class="soc-sev-tag">${SEVERITY_LABELS[severity]}</span>
+      `;
+
+      if (forcedSeverity && !prefersReducedMotion) item.classList.add("flash");
+      if (currentFilter !== "all" && severity !== currentFilter) {
+        item.classList.add("hidden-by-filter");
+      }
+
+      feedEl.prepend(item);
+      while (feedEl.children.length > MAX_FEED_ITEMS) {
+        feedEl.lastElementChild.remove();
+      }
+
+      updateMetrics();
+      return severity;
+    };
+
+    /* --- gráfico de tráfego (canvas) --- */
+    const trafficData = Array.from({ length: 40 }, () => 30 + Math.random() * 20);
+    let spikeTicks = 0;
+
+    const drawTraffic = () => {
+      if (!ctx || !canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const max = 100;
+      const step = w / (trafficData.length - 1);
+
+      ctx.beginPath();
+      trafficData.forEach((v, i) => {
+        const x = i * step;
+        const y = h - (v / max) * h;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, h);
+      gradient.addColorStop(0, "rgba(0,255,157,.5)");
+      gradient.addColorStop(1, "rgba(0,255,157,0)");
+
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      trafficData.forEach((v, i) => {
+        const x = i * step;
+        const y = h - (v / max) * h;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = "#00ff9d";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    };
+
+    const stepTraffic = () => {
+      const base = 35 + Math.sin(Date.now() / 4000) * 12;
+      const noise = (Math.random() - 0.5) * 10;
+      const spike = spikeTicks > 0 ? 45 : 0;
+      if (spikeTicks > 0) spikeTicks -= 1;
+
+      let next = Math.max(5, Math.min(98, base + noise + spike));
+      trafficData.push(next);
+      trafficData.shift();
+      drawTraffic();
+    };
+
+    /* --- ciclo de eventos --- */
+    const scheduleNextTick = () => {
+      if (isPaused) return;
+      const delay = 1800 + Math.random() * 1800;
+      tickTimer = setTimeout(() => {
+        addEvent();
+        stepTraffic();
+        scheduleNextTick();
+      }, delay);
+    };
+
+    if (attackBtn) {
+      attackBtn.addEventListener("click", () => {
+        addEvent("critical");
+        spikeTicks = 6;
+        stepTraffic();
+      });
+    }
+
+    if (pauseBtn) {
+      pauseBtn.addEventListener("click", () => {
+        isPaused = !isPaused;
+        pauseBtn.textContent = isPaused ? "Retomar" : "Pausar";
+        pauseBtn.setAttribute("aria-pressed", String(isPaused));
+        if (statusDot) statusDot.classList.toggle("paused", isPaused);
+        if (statusText) {
+          statusText.textContent = isPaused ? "MONITORAMENTO PAUSADO" : "MONITORAMENTO ATIVO";
+        }
+        if (isPaused) {
+          clearTimeout(tickTimer);
+        } else {
+          scheduleNextTick();
+        }
+      });
+    }
+
+    $$(".soc-filter").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        $$(".soc-filter").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        updateFilterVisibility();
+      });
+    });
+
+    /* estado inicial: alguns eventos já na tela */
+    drawTraffic();
+    addEvent("low");
+    addEvent("medium");
+    addEvent("high");
+    scheduleNextTick();
+  };
+
+  /* ============================================================
      ANO NO RODAPÉ
   ============================================================ */
   const initFooterYear = () => {
@@ -263,6 +538,7 @@
     initScrollReveal();
     initCounters();
     initSkillBars();
+    initSocSimulator();
     initParallax();
     initTopButton();
     initFooterYear();
