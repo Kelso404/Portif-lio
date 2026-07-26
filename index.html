@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kayke Kelson | Suporte N1 & Cyber Security</title>
-<meta name="description" content="Portfólio de Kayke Kelson — Suporte Técnico N1, com certificações em SOC, Hacker Ético e Segurança em Linux, e projetos de automação de processos.">
+<meta name="description" content="Portfólio de Kayke Kelson — Suporte Técnico N1, certificações em SOC, Hacker Ético e Segurança em Linux, simulador SOC interativo e projetos de automação com Python, C#, C++, MySQL e PHP.">
 <meta name="theme-color" content="#0d1117">
 
 <meta property="og:title" content="Kayke Kelson | Suporte N1 & Cyber Security">
-<meta property="og:description" content="Suporte Técnico N1 com certificações em SOC, Hacker Ético e Segurança em Linux. Automação que reduziu em até 90% o tempo de processos manuais.">
+<meta property="og:description" content="Suporte Técnico N1 com certificações em SOC, Hacker Ético e Segurança em Linux. Simulador SOC interativo e automação que reduziu em até 90% o tempo de processos manuais.">
 <meta property="og:type" content="website">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +35,7 @@
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#certificacoes">Certificações</a></li>
       <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#soc-simulador">Simulador SOC</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
@@ -231,6 +232,77 @@
     </div>
   </section>
 
+  <section id="soc-simulador">
+    <p class="eyebrow">Demonstração Interativa</p>
+    <h2 class="section-title">Simulador de Centro de Operações (SOC)</h2>
+    <p class="soc-intro">
+      Console que reproduz a rotina de um SOC — feed de eventos, triagem por
+      severidade e monitoramento de tráfego. <strong>Todos os dados abaixo são
+      simulados</strong>, gerados no navegador apenas para fins de demonstração.
+    </p>
+
+    <div class="soc-console">
+      <div class="soc-toolbar">
+        <div class="soc-status">
+          <span class="status-dot" id="socStatusDot"></span>
+          <span id="socStatusText">MONITORAMENTO ATIVO</span>
+        </div>
+
+        <div class="soc-controls" role="group" aria-label="Filtrar eventos por severidade">
+          <button type="button" class="soc-filter active" data-filter="all">Todos</button>
+          <button type="button" class="soc-filter" data-filter="critical">Crítico</button>
+          <button type="button" class="soc-filter" data-filter="high">Alto</button>
+          <button type="button" class="soc-filter" data-filter="medium">Médio</button>
+          <button type="button" class="soc-filter" data-filter="low">Baixo</button>
+        </div>
+
+        <div class="soc-actions">
+          <button type="button" id="socSimulateAttack" class="soc-btn soc-btn-attack">Simular ataque</button>
+          <button type="button" id="socPauseToggle" class="soc-btn soc-btn-pause" aria-pressed="false">Pausar</button>
+        </div>
+      </div>
+
+      <div class="soc-grid">
+        <div class="soc-panel soc-feed-panel">
+          <div class="soc-panel-head">
+            <h3>Feed de Eventos</h3>
+            <span class="soc-badge" id="socFeedCount">0 eventos</span>
+          </div>
+          <div class="soc-feed" id="socFeed" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+
+        <div class="soc-panel soc-stats-panel">
+          <div class="soc-metrics">
+            <div class="soc-metric">
+              <span class="soc-metric-value" id="socTotalAlerts">0</span>
+              <span class="soc-metric-label">Alertas hoje</span>
+            </div>
+            <div class="soc-metric">
+              <span class="soc-metric-value" id="socBlocked">0</span>
+              <span class="soc-metric-label">Ameaças bloqueadas</span>
+            </div>
+            <div class="soc-metric">
+              <span class="soc-metric-value" id="socActive">0</span>
+              <span class="soc-metric-label">Incidentes ativos</span>
+            </div>
+          </div>
+
+          <h3 class="soc-subtitle">Severidade</h3>
+          <div class="soc-severity-bars" id="socSeverityBars"></div>
+
+          <h3 class="soc-subtitle">Tráfego de rede</h3>
+          <canvas
+            id="socTrafficChart"
+            class="soc-chart"
+            width="320" height="110"
+            role="img"
+            aria-label="Gráfico simulado de tráfego de rede em tempo real"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="stats" aria-label="Resultados em números">
     <div class="stat">
       <h3><span class="counter" data-target="90">0</span>%</h3>
@@ -254,22 +326,53 @@
     <p class="eyebrow">Skills</p>
     <h2 class="section-title">Habilidades</h2>
 
-    <div class="skills-container">
-      <div class="skill">
-        <span>Linux</span>
-        <div class="bar"><div style="--w:85%"></div></div>
+    <div class="skills-groups">
+      <div class="skills-group">
+        <h3 class="skills-group-title">Infraestrutura &amp; Segurança</h3>
+        <div class="skills-container">
+          <div class="skill">
+            <span>Linux</span>
+            <div class="bar"><div style="--w:85%"></div></div>
+          </div>
+          <div class="skill">
+            <span>TCP/IP</span>
+            <div class="bar"><div style="--w:90%"></div></div>
+          </div>
+          <div class="skill">
+            <span>Excel Avançado</span>
+            <div class="bar"><div style="--w:95%"></div></div>
+          </div>
+          <div class="skill">
+            <span>Automação</span>
+            <div class="bar"><div style="--w:90%"></div></div>
+          </div>
+        </div>
       </div>
-      <div class="skill">
-        <span>TCP/IP</span>
-        <div class="bar"><div style="--w:90%"></div></div>
-      </div>
-      <div class="skill">
-        <span>Excel Avançado</span>
-        <div class="bar"><div style="--w:95%"></div></div>
-      </div>
-      <div class="skill">
-        <span>Automação</span>
-        <div class="bar"><div style="--w:90%"></div></div>
+
+      <div class="skills-group">
+        <h3 class="skills-group-title">Linguagens &amp; Bancos de Dados</h3>
+        <div class="skills-container">
+          <div class="skill">
+            <span>Python</span>
+            <div class="bar"><div style="--w:80%"></div></div>
+          </div>
+          <div class="skill">
+            <span>MySQL</span>
+            <div class="bar"><div style="--w:78%"></div></div>
+          </div>
+          <div class="skill">
+            <span>C#</span>
+            <div class="bar"><div style="--w:65%"></div></div>
+          </div>
+          <div class="skill">
+            <span>PHP</span>
+            <div class="bar"><div style="--w:60%"></div></div>
+          </div>
+          <div class="skill">
+            <span>C++</span>
+            <div class="bar"><div style="--w:55%"></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
